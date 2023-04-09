@@ -76,6 +76,7 @@
 
 from pysaucenao import SauceNao
 import os
+from os.path import join, dirname
 import unicodedata as ud
 import time
 from tqdm import tqdm
@@ -84,16 +85,23 @@ import re
 import urllib.parse
 
 
+import asyncio
+from dotenv import load_dotenv
+
+
 # In[ ]:
 
 
 #### this section is for variables that can be modified for different results ##
 
-api = 'c2ba69f91ef9cb5c617c9b20d5ef476c73662240'  # API key from SauceNAO
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
+api = os.environ.get("api_key")  # API key from SauceNAO
 sauce = SauceNao(api_key = api,results_limit = 5, min_similarity = 60)  # API, number of results, minimum similarity
 
-path = r'E:\Pictures\Pictures\Sorting\Python Processing'  # working directory where all images
+
+path = os.environ.get("user_path")  # working directory where all images
 os.chdir(path)                                                # should be placed in before script runs
 
 max_file_size = 30000000  # Maximum size of image (in KB)
@@ -320,7 +328,7 @@ for image in tqdm(os.listdir()):
     elif image.endswith('.png') or image.endswith('.jpeg') or image.endswith('.jpg') or image.endswith('.gif') or image.endswith('.jfif'):
         try:
             current_iteration += 1
-            source = await sauce.from_file(image)
+            source = asyncio.run(sauce.from_file(image))
             long_remaining = source.long_remaining
             if len(source) > 0:
                 processed_source = process(source)
@@ -408,4 +416,3 @@ print('Counting error? ' + str((total == images_remaining + folders_created) == 
 # print('----------------------------')
 # print('Processed source:')
 # print(processed_source)
-
