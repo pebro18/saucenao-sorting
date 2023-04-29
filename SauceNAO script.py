@@ -18,10 +18,10 @@
 # Image within folders will be renamed according to what the title on the source is
 # - In case of duplicate titles, image will have a _(int) appended onto the end
 # - To prevent duplicates of actual images, use dupeGuru before using this script
-# Link to artists' pages or the image sources' pages will be created within .txt files in each folder
-# - Links are divided by the domain of the artists' pages/sources' pages (e.g Danbooru, Pixiv, Twitter)
-# - In the case that the result from SauceNAO does not provide an artist page, then the script will use the image
-# source's page instead
+# Link to artists pages or the image sources' pages will be created within .txt files in each folder
+# - Links are divided by the domain of the artists pages/sources pages (e.g Danbooru, Pixiv, Twitter)
+# - In the case that the result from SauceNAO does not provide an artist page, 
+# then the script will use the image source's page instead
 
 
 # IMPORTANT NOTES
@@ -88,6 +88,9 @@ from tqdm import tqdm
 
 from dotenv import load_dotenv
 
+import platform
+if platform.system()=='Windows':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 # In[ ]:
 
